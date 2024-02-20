@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class GoodGroups {
     public Map<String, Set<String>> constraintsFrom(String constraintsString) throws IOException {
-        Map<String, Set<String>> constraints = new HashMap<String, Set<String>>();
+        Map<String, Set<String>> constraints = new HashMap<>();
 
         try (StringReader stringReader = new StringReader(constraintsString); BufferedReader reader = new BufferedReader(stringReader)) {
 
