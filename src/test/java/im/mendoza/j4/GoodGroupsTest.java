@@ -2,19 +2,42 @@ package im.mendoza.j4;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GoodGroupsTest {
-    @Test
-    public void fromConstraints_basic() throws IOException {
-        GoodGroups goodGroups = new GoodGroups();
 
-        Map<String, Set<String>> constraints = goodGroups.constraintsFrom("1\n" +
-                "ELODIE CHI");
+    @Test
+    public void violationsOf_basic() {
+        String input = """
+                1
+                ELODIE CHI
+                0
+                2
+                DWAYNE BEN ANJALI
+                CHI FRANCOIS ELODIE
+                """;
+
+        GoodGroups goodGroups = new GoodGroups(input);
+        assertEquals(goodGroups.getTogetherConstraints().size(), 2);
+        assertEquals(goodGroups.getApartConstraints().size(), 0);
+        assertEquals(goodGroups.getViolations().size(), 0);
+    }
+
+    @Test
+    public void fromConstraints_basic() {
+        GoodGroups goodGroups = new GoodGroups("""
+                1
+                ELODIE CHI
+                0
+                2
+                DWAYNE BEN ANJALI
+                CHI FRANCOIS ELODIE""");
+
+        Map<String, Set<String>> constraints = goodGroups.getTogetherConstraints();
 
         assertTrue(constraints.containsKey("ELODIE"));
         assertTrue(constraints.get("ELODIE").contains("CHI"));
@@ -24,14 +47,22 @@ class GoodGroupsTest {
     }
 
     @Test
-    public void fromConstraints_multipleLines() throws IOException {
-        GoodGroups goodGroups = new GoodGroups();
-
-        Map<String, Set<String>> constraints = goodGroups.constraintsFrom("""
+    public void fromConstraints_multipleLines() {
+        GoodGroups goodGroups = new GoodGroups("""
                 3
                 A B
                 G L
-                J K""");
+                J K
+                2
+                D F
+                D G
+                4
+                A C G
+                B D F
+                E H I
+                J K L""");
+
+        Map<String, Set<String>> constraints = goodGroups.getTogetherConstraints();
 
         assertTrue(constraints.containsKey("A"));
         assertTrue(constraints.get("A").contains("B"));
@@ -50,14 +81,15 @@ class GoodGroupsTest {
 
 
     @Test
-    public void fromConstraints_repeatName() throws IOException {
-        GoodGroups goodGroups = new GoodGroups();
-
-        Map<String, Set<String>> constraints = goodGroups.constraintsFrom("""
+    public void fromConstraints_repeatName() {
+        GoodGroups goodGroups = new GoodGroups("""
                 3
                 A B
                 G L
-                A K""");
+                A K
+                0""");
+
+        Map<String, Set<String>> constraints = goodGroups.getTogetherConstraints();
 
         assertTrue(constraints.containsKey("A"));
         assertTrue(constraints.get("A").contains("B"));
