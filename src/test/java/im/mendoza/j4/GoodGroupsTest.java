@@ -24,30 +24,12 @@ class GoodGroupsTest {
         GoodGroups goodGroups = new GoodGroups(input);
         assertEquals(goodGroups.getTogetherConstraints().size(), 2);
         assertEquals(goodGroups.getApartConstraints().size(), 0);
+        assertEquals(2, goodGroups.getGroups().size());
         assertEquals(goodGroups.getViolations().size(), 0);
     }
 
     @Test
-    public void fromConstraints_basic() {
-        GoodGroups goodGroups = new GoodGroups("""
-                1
-                ELODIE CHI
-                0
-                2
-                DWAYNE BEN ANJALI
-                CHI FRANCOIS ELODIE""");
-
-        Map<String, Set<String>> constraints = goodGroups.getTogetherConstraints();
-
-        assertTrue(constraints.containsKey("ELODIE"));
-        assertTrue(constraints.get("ELODIE").contains("CHI"));
-        assertTrue(constraints.containsKey("CHI"));
-        assertTrue(constraints.get("CHI").contains("ELODIE"));
-
-    }
-
-    @Test
-    public void fromConstraints_multipleLines() {
+    public void violationsOf_multipleLines() {
         GoodGroups goodGroups = new GoodGroups("""
                 3
                 A B
@@ -76,18 +58,23 @@ class GoodGroupsTest {
         assertTrue(constraints.get("J").contains("K"));
         assertTrue(constraints.containsKey("K"));
         assertTrue(constraints.get("K").contains("J"));
+        assertEquals(4, goodGroups.getGroups().size());
+        assertEquals(3, goodGroups.getViolations().size());
 
     }
 
 
     @Test
-    public void fromConstraints_repeatName() {
+    public void violationsOf_repeatName() {
         GoodGroups goodGroups = new GoodGroups("""
                 3
                 A B
                 G L
                 A K
-                0""");
+                0
+                1
+                A B G""");
+
 
         Map<String, Set<String>> constraints = goodGroups.getTogetherConstraints();
 
@@ -103,6 +90,8 @@ class GoodGroupsTest {
         assertTrue(constraints.get("A").contains("K"));
         assertTrue(constraints.containsKey("K"));
         assertTrue(constraints.get("K").contains("A"));
+        assertEquals(1, goodGroups.getGroups().size());
+        assertEquals(2, goodGroups.getViolations().size());
 
     }
 
