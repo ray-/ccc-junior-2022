@@ -34,9 +34,6 @@ public class Yard {
                 tree.getY() >= poolRow &&
                 tree.getY() <= poolRow + poolLength - 1
                 ) {
-                if (poolRow == 5 && poolCol == 7) {
-                    System.out.println(tree);
-                }
                 return false;
             }
         }
